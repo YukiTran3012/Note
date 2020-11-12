@@ -8,7 +8,6 @@ class App extends Component{
   constructor(props){
     super(props);
     this.state = {
-      tasks  :  [],//id:unique,
       isDisabled : false,
       taskEditing : null,
       filter : {
@@ -20,39 +19,6 @@ class App extends Component{
         sortBy : '',
         sortValue : 1,
       }
-    }
-  }
-  //thêm data lúc đầu
-  // onGenerateData = () => {
-  //   var randomstring = require("randomstring");
-  //   var tasks  = [
-  //     {
-  //       id : randomstring.generate(),
-  //       name : 'Đi bơi',
-  //       status : true,
-  //     },
-  //     {
-  //       id : randomstring.generate(),
-  //       name : 'Lập trình',
-  //       status : true,
-  //     },
-  //     {
-  //       id : randomstring.generate(),
-  //       name : 'Làm bài',
-  //       status : false,
-  //     }
-  //   ]
-  //   this.setState({
-  //     tasks : tasks,
-  //   })
-  //   localStorage.setItem('tasks',JSON.stringify(tasks));
-  // }
-  componentDidMount(){
-    if(localStorage && localStorage.getItem('tasks')) {
-      var tasks = JSON.parse(localStorage.getItem('tasks'));
-      this.setState({
-        tasks : tasks,
-      })
     }
   }
   toggleTab = () => {//thêm tab
@@ -175,49 +141,52 @@ class App extends Component{
     // console.log(this.state.sort);
   }
   render(){
-    var {tasks,isDisabled,taskEditing ,filter,keyword,sort} = this.state;// === var tasks = this.state.tasks;
+    var {isDisabled,taskEditing ,
+      // filter,
+      // keyword,
+      sort} = this.state;// === var tasks = this.state.tasks;
 
     //Filter
-    if(filter){
-      if(filter.name){
-        tasks = tasks.filter((task)=>{
-          return task.name.toLowerCase().indexOf(filter.name.toLowerCase()) !== -1;
-        })
-      }
-      // if(filter.status){//đang kiểm tra true --> !== null , !==0  ,.....
-      tasks = tasks.filter((task) => {
-        if(filter.status === -1){
-          return task;
-        }
-        else{
-          return task.status === (filter.status === 1 ? false : true)
-        }
+    // if(filter){
+    //   if(filter.name){
+    //     tasks = tasks.filter((task)=>{
+    //       return task.name.toLowerCase().indexOf(filter.name.toLowerCase()) !== -1;
+    //     })
+    //   }
+    //   // if(filter.status){//đang kiểm tra true --> !== null , !==0  ,.....
+    //   tasks = tasks.filter((task) => {
+    //     if(filter.status === -1){
+    //       return task;
+    //     }
+    //     else{
+    //       return task.status === (filter.status === 1 ? false : true)
+    //     }
         
-      })
-      // }
-    }
-    //search
-    if(keyword){
-      tasks = tasks.filter((task) => {
-        return task.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
-      })
-    }
-    //Sort
-    if(sort.sortBy === 'name') {
-      tasks.sort((task1, task2) => {
-        if(task1.name > task2.name) return (sort.sortValue);
-        else if(task1.name < task2.name) return -(sort.sortValue);
-        else return 0;
-      })
-    }
-    else
-    {
-      tasks.sort((task1, task2) => {
-        if(task1.status > task2.status) return -(sort.sortValue);
-        else if(task1.status < task2.status) return (sort.sortValue);
-        else return 0;
-      })
-    }
+    //   })
+    //   // }
+    // }
+    // //search
+    // if(keyword){
+    //   tasks = tasks.filter((task) => {
+    //     return task.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+    //   })
+    // }
+    // //Sort
+    // if(sort.sortBy === 'name') {
+    //   tasks.sort((task1, task2) => {
+    //     if(task1.name > task2.name) return (sort.sortValue);
+    //     else if(task1.name < task2.name) return -(sort.sortValue);
+    //     else return 0;
+    //   })
+    // }
+    // else
+    // {
+    //   tasks.sort((task1, task2) => {
+    //     if(task1.status > task2.status) return -(sort.sortValue);
+    //     else if(task1.status < task2.status) return (sort.sortValue);
+    //     else return 0;
+    //   })
+    // }
     
     var elementTabForm = isDisabled 
         ?  <TaskForm taskEditing={taskEditing} onSubmit={this.onSubmit} onCloseForm={this.onCloseForm}/> : '';
@@ -235,17 +204,11 @@ class App extends Component{
           <button type="button" className="btn btn-primary" onClick={this.toggleTab}>
             <span className="fa fa-plus mr-5"/>Thêm Công Việc
           </button>
-          {/* <button
-            type="button"
-            className="btn btn-warning ml-10"
-            onClick={this.onGenerateData}>
-            <span className="fa fa-plus mr-5" />GenerateData
-          </button> */}
           <Control onKeyWord = {this.onKeyWord} onSort = {this.onSort} sortBy = {sort.sortBy} sortValue = {sort.sortValue}/>
           <div className="row mt-15">
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <TaskList 
-                tasks={ tasks } 
+                // tasks={ tasks } //không chuyền từ app.js
                 onDeleteInApp={this.onDeleteInApp} 
                 onUpdateDataInApp={ this.onUpdateDataInApp }
                 onUpdateInApp={this.onUpdateInApp}
